@@ -1,4 +1,3 @@
-# Ignore WebStorm/IntelliJ project settings
 .idea/
 server/node_modules
-
+server/.env
