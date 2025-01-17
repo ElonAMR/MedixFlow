@@ -19,5 +19,17 @@ const pool=mysql.createPool({
 //working with promise
 const db=pool.promise();
 
+
+//checking connection
+(async () => {
+    try{
+        await db.getConnection();
+        console.log("Connected to the database!");
+    }catch (err){
+        console.error("Failed to connect to the database:", err);
+    }
+})();
+
+
 //export connect db for uses
 module.exports=db;

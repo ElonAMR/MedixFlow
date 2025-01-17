@@ -2,10 +2,12 @@ const express=require('express');
 const cors=require('cors');
 
 const db=require('./db');
+const {response} = require("express");
 
 //create object of express
 const app=express();
 
+app.use(express.json());
 
 const PORT=5000;
 
@@ -33,7 +35,40 @@ app.get('/test-db',async (req,res)=>{
     }
 });
 
+app.post('/addUser',async (req,res)=> {
 
+        console.log('endpoint start');
+
+        // doing Destructuring for get key in object
+        const {FirstName,LastName,IdNumber,Password,Role,Email,Phone,Address,DateBirth,AccountStatus} =req.body;
+
+        //Do an insert query into a users table
+        const query=`INSERT INTO users
+                    (first_name,last_name,id_number,password,role,email,phone_number,address,birth_date,account_status)
+                    VALUES(?,?,?,?,?,?,?,?,?,?);`;
+
+        const values=[FirstName,LastName,IdNumber,Password,Role,Email,Phone,Address,DateBirth,AccountStatus]
+
+        console.log(values);
+
+        try {
+            const result=await db.query(query,values)
+
+            res.status(200).send({
+                success:true,
+                message:'User Added Successfully!',
+                result:result
+            });
+
+        }catch (err){
+            console.error(err);
+            res.status(500).send({
+                success:false,
+                message:'Failed to Add User!',
+                error:err
+            });
+        }
+});
 
 
 //wait for request on port x
